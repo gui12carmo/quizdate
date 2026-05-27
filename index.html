@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Little Something for You 💌</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 40%, #1a0a2e 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    /* Floating hearts background */
+    .hearts-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .heart-float {
+      position: absolute;
+      bottom: -50px;
+      font-size: 1.2rem;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(0deg);   opacity: 0; }
+      10%  { opacity: 0.4; }
+      90%  { opacity: 0.2; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 640px;
+      padding: 20px;
+    }
+
+    /* ── SCREENS ── */
+    .screen { display: none; animation: fadeIn 0.6s ease; }
+    .screen.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .card .emoji-big { font-size: 4rem; margin-bottom: 16px; display: block; }
+
+    h1 {
+      color: #fff;
+      font-size: 2rem;
+      font-weight: normal;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    h2 {
+      color: #e8c5f0;
+      font-size: 1.35rem;
+      font-weight: normal;
+      margin-bottom: 8px;
+    }
+    p {
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      margin-bottom: 28px;
+    }
+    .progress-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .progress-bar-bg {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #e879f9, #fb923c);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* ── OPTIONS ── */
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .options.single-col { grid-template-columns: 1fr; }
+
+    .option-btn {
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: 16px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+    }
+    .option-btn:hover {
+      background: rgba(232,121,249,0.2);
+      border-color: #e879f9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(232,121,249,0.25);
+    }
+    .option-btn.selected {
+      background: linear-gradient(135deg, rgba(232,121,249,0.3), rgba(251,146,60,0.3));
+      border-color: #e879f9;
+      box-shadow: 0 0 0 2px rgba(232,121,249,0.4);
+    }
+    .option-btn .opt-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 16px 48px;
+      background: linear-gradient(135deg, #e879f9, #fb923c);
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 32px rgba(232,121,249,0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(232,121,249,0.5);
+    }
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.7);
+      font-family: inherit;
+      font-size: 0.9rem;
+      padding: 10px 28px;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 14px;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: #e879f9; color: #e879f9; }
+
+    /* ── RESULT SCREEN ── */
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 24px 0;
+      text-align: left;
+    }
+    .result-item {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .result-item .r-label {
+      color: rgba(255,255,255,0.45);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .result-item .r-value {
+      color: #f0d4ff;
+      font-size: 0.95rem;
+    }
+
+    .final-msg {
+      background: linear-gradient(135deg, rgba(232,121,249,0.15), rgba(251,146,60,0.15));
+      border: 1px solid rgba(232,121,249,0.3);
+      border-radius: 16px;
+      padding: 20px 24px;
+      color: #fff;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 20px 0;
+    }
+
+    .stars {
+      color: #e879f9;
+      font-size: 1.3rem;
+      letter-spacing: 4px;
+      margin: 8px 0;
+    }
+
+    .btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 14px 32px;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-copy:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: #e879f9;
+      color: #e879f9;
+    }
+    .btn-copy.copied {
+      background: rgba(52,211,153,0.15);
+      border-color: #34d399;
+      color: #34d399;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 32px 24px; }
+      h1 { font-size: 1.6rem; }
+      .options { grid-template-columns: 1fr; }
+      .result-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating hearts -->
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="container">
+
+  <!-- ── INTRO ── -->
+  <div class="screen active" id="screen-intro">
+    <div class="card">
+      <span class="emoji-big">💌</span>
+      <h1>Hey, you.</h1>
+      <p>
+        I made this little quiz just for you.<br/>
+        Answer honestly — your answers will help me plan
+        the perfect time together. No pressure, just fun. 🌙
+      </p>
+      <p style="font-size:0.85rem; color:rgba(255,255,255,0.4);">7 quick questions · takes about 2 minutes</p>
+      <button class="btn-primary" onclick="startQuiz()">Let's go ✨</button>
+    </div>
+  </div>
+
+  <!-- ── QUESTIONS ── -->
+  <div class="screen" id="screen-quiz">
+    <div class="card">
+      <div class="progress-wrap">
+        <div class="progress-label">Question <span id="q-num">1</span> of 7</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill" style="width:14%"></div>
+        </div>
+      </div>
+
+      <h2 id="q-text"></h2>
+      <p id="q-sub" style="margin-bottom:0; font-size:0.88rem;"></p>
+
+      <div class="options" id="options-container"></div>
+
+      <div style="display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap;">
+        <button class="btn-ghost" onclick="prevQuestion()" id="btn-back">← Back</button>
+        <button class="btn-primary" onclick="nextQuestion()" id="btn-next" disabled>Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RESULT ── -->
+  <div class="screen" id="screen-result">
+    <div class="card">
+      <span class="emoji-big" id="result-emoji">🎉</span>
+      <h1 id="result-title">Perfect!</h1>
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <p id="result-subtitle"></p>
+
+      <div class="result-grid" id="result-grid"></div>
+
+      <div class="final-msg" id="final-msg"></div>
+
+      <p style="color:rgba(255,255,255,0.45); font-size:0.8rem; margin-bottom:4px;">Send your answers 👇</p>
+      <button class="btn-copy" id="btn-copy" onclick="copyAnswers()">
+        <span>📋</span><span>Copy answers to send</span>
+      </button>
+      <br/>
+      <button class="btn-ghost" onclick="restart()">Start over 🔄</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const questions = [
+    {
+      id: "vibe",
+      text: "What's your ideal date vibe?",
+      sub: "Pick the one that feels most like you",
+      cols: 2,
+      options: [
+        { icon: "🕯️", label: "Romantic & cozy" },
+        { icon: "🎢", label: "Fun" },
+        { icon: "🍳", label: "Chill & low-key" },
+        { icon: "✨", label: "Fancy & special" },
+      ]
+    },
+    {
+      id: "setting",
+      text: "Inside or outside?",
+      sub: "Where do you feel most comfortable?",
+      cols: 2,
+      options: [
+        { icon: "🌿", label: "Outside — fresh air!" },
+        { icon: "🏠", label: "Indoors — cozy vibes" },
+        { icon: "🌅", label: "Rooftop / terrace" },
+      ]
+    },
+    {
+      id: "food",
+      text: "What kind of food are you in the mood for?",
+      sub: "Be honest — this is important 😄",
+      cols: 2,
+      options: [
+        { icon: "🍕", label: "Pizza or comfort food" },
+        { icon: "🥩", label: "Steakhouse / grill" },
+        { icon: "🌮", label: "Tacos" },
+        { icon: "🍝", label: "Italian restaurant" },
+        { icon: "🥗", label: "Light & healthy" },
+      ]
+    },
+    {
+      id: "activity",
+      text: "After dinner — what sounds fun?",
+      sub: "Pick your favourite follow-up activity",
+      cols: 2,
+      options: [
+        { icon: "🎬", label: "Movie or series" },
+        { icon: "🎳", label: "Bowling / arcade" },
+        { icon: "🚶", label: "Walk under the stars" },
+        { icon: "🍸", label: "Drinks & deep talk" },
+      ]
+    },
+    {
+      id: "time",
+      text: "What time works best for you?",
+      sub: "Purely for planning — no trick questions!",
+      cols: 2,
+      options: [
+        { icon: "☀️", label: "Afternoon" },
+        { icon: "🌇", label: "Early evening" },
+        { icon: "🌙", label: "Night" },
+      ]
+    },
+    {
+      id: "music",
+      text: "What's on the playlist?",
+      sub: "Background soundtrack to the night",
+      cols: 2,
+      options: [
+        { icon: "🎷", label: "Jazz / Lo-fi" },
+        { icon: "🎸", label: "Indie / Alternative" },
+        { icon: "💿", label: "Pop / R&B" },
+        { icon: "🎵", label: "Whatever feels right" },
+      ]
+    },
+    {
+      id: "feel",
+      text: "Most importantly — how do you want to feel?",
+      sub: "The real one 💫",
+      cols: 1,
+      options: [
+        { icon: "😂", label: "Laughing the whole time" },
+        { icon: "🦋", label: "That butterfly feeling" },
+        { icon: "🤗", label: "Safe, comfortable, at ease" },
+        { icon: "🌟", label: "Like it's something special" },
+      ]
+    },
+  ];
+
+  const answers = {};
+  let current = 0;
+
+  function spawnHearts() {
+    const bg = document.getElementById('heartsBg');
+    const emojis = ['🍚','🥚','🍳','🍚','🥚','🍳'];
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('div');
+      el.className = 'heart-float';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (10 + Math.random() * 18) + 's';
+      el.style.animationDelay = (Math.random() * 15) + 's';
+      el.style.fontSize = (0.8 + Math.random() * 1) + 'rem';
+      bg.appendChild(el);
+    }
+  }
+  spawnHearts();
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+  }
+
+  function startQuiz() {
+    current = 0;
+    renderQuestion();
+    showScreen('quiz');
+  }
+
+  function renderQuestion() {
+    const q = questions[current];
+    document.getElementById('q-num').textContent = current + 1;
+    document.getElementById('q-text').textContent = q.text;
+    document.getElementById('q-sub').textContent = q.sub;
+
+    const fill = ((current + 1) / questions.length) * 100;
+    document.getElementById('progress-fill').style.width = fill + '%';
+
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+    container.className = 'options' + (q.cols === 1 ? ' single-col' : '');
+
+    q.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn' + (answers[q.id] === idx ? ' selected' : '');
+      btn.innerHTML = `<span class="opt-icon">${opt.icon}</span><span>${opt.label}</span>`;
+      btn.onclick = () => selectOption(q.id, idx);
+      container.appendChild(btn);
+    });
+
+    document.getElementById('btn-next').disabled = answers[q.id] === undefined;
+    document.getElementById('btn-back').style.display = current === 0 ? 'none' : 'inline-block';
+  }
+
+  function selectOption(qId, idx) {
+    answers[qId] = idx;
+    document.querySelectorAll('#options-container .option-btn').forEach((btn, i) => {
+      btn.classList.toggle('selected', i === idx);
+    });
+    document.getElementById('btn-next').disabled = false;
+  }
+
+  function nextQuestion() {
+    if (answers[questions[current].id] === undefined) return;
+    if (current < questions.length - 1) {
+      current++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function prevQuestion() {
+    if (current > 0) { current--; renderQuestion(); }
+  }
+
+  function showResult() {
+    const get = (id) => questions.find(q => q.id === id)
+      .options[answers[id]];
+
+    // Pick emoji & title based on vibe
+    const vibes = ["💕","🎉","🍳","🌟"];
+    const titles = ["So romantic 💕","Adventure awaits 🎉","Keeping it easy 🍳","Something unforgettable ✨"];
+    const vibeIdx = answers["vibe"] ?? 0;
+
+    document.getElementById('result-emoji').textContent = vibes[vibeIdx];
+    document.getElementById('result-title').textContent = titles[vibeIdx];
+    document.getElementById('result-subtitle').textContent =
+      "Here's what I know about our perfect night together:";
+
+    const labels = ["Vibe","Where","Food","After","Time","Music","Feeling"];
+    const ids = ["vibe","setting","food","activity","time","music","feel"];
+    const grid = document.getElementById('result-grid');
+    grid.innerHTML = '';
+    ids.forEach((id, i) => {
+      const opt = get(id);
+      const div = document.createElement('div');
+      div.className = 'result-item';
+      div.innerHTML = `<div class="r-label">${labels[i]}</div>
+                       <div class="r-value">${opt.icon} ${opt.label}</div>`;
+      grid.appendChild(div);
+    });
+
+    const feelOpt = get("feel");
+    const feelMsgs = [
+      "I'll make sure you're laughing all night — promise. 😄",
+      "I can't promise I won't give you butterflies... actually, I can't promise at all. 🦋",
+      "No pressure, no rush.... just us. 🤗",
+    ];
+    const feelMsg = feelMsgs[answers["feel"] ?? 0];
+
+    document.getElementById('final-msg').innerHTML =
+      `You want to feel <strong>${feelOpt.label.toLowerCase()}</strong>.<br/>
+       ${feelMsg}<br/><br/>
+       <em>So... are you free soon? 😊</em>`;
+
+    showScreen('result');
+  }
+
+  function copyAnswers() {
+    const get = (id) => questions.find(q => q.id === id).options[answers[id]];
+    const labels = ["Vibe","Where","Food","After","Time","Music","Feeling"];
+    const ids    = ["vibe","setting","food","activity","time","music","feel"];
+
+    const lines = ids.map((id, i) => {
+      const opt = get(id);
+      return `${opt.icon} *${labels[i]}:* ${opt.label}`;
+    });
+
+    const text =
+      `💌 *My Date Quiz Answers*\n\n` +
+      lines.join('\n') +
+      `\n\n✨ Now you know what I want — plan accordingly 😄`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('btn-copy');
+      btn.classList.add('copied');
+      btn.innerHTML = '<span>✅</span><span>Copied! Send it now</span>';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<span>📋</span><span>Copy answers to send</span>';
+      }, 3000);
+    }).catch(() => {
+      /* fallback for browsers that block clipboard without interaction */
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      const btn = document.getElementById('btn-copy');
+      btn.classList.add('copied');
+      btn.innerHTML = '<span>✅</span><span>Copied! Send it now</span>';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<span>📋</span><span>Copy answers to send</span>';
+      }, 3000);
+    });
+  }
+
+  function restart() {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    current = 0;
+    showScreen('intro');
+  }
+</script>
+</body>
+</html>
