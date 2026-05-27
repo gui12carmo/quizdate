@@ -48,6 +48,37 @@
       padding: 20px;
     }
 
+    /* ── LANGUAGE SWITCH ── */
+    .lang-switch {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .lang-btn {
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.55);
+      font-family: inherit;
+      font-size: 0.8rem;
+      padding: 6px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: rgba(232,121,249,0.2);
+      border-color: #e879f9;
+      color: #fff;
+    }
+    .lang-btn:hover:not(.active) {
+      border-color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.85);
+    }
+    .lang-sep { color: rgba(255,255,255,0.2); font-size: 0.9rem; }
+
     /* ── SCREENS ── */
     .screen { display: none; animation: fadeIn 0.6s ease; }
     .screen.active { display: block; }
@@ -90,9 +121,7 @@
     }
 
     /* ── PROGRESS BAR ── */
-    .progress-wrap {
-      margin-bottom: 28px;
-    }
+    .progress-wrap { margin-bottom: 28px; }
     .progress-label {
       color: rgba(255,255,255,0.5);
       font-size: 0.8rem;
@@ -149,6 +178,28 @@
       box-shadow: 0 0 0 2px rgba(232,121,249,0.4);
     }
     .option-btn .opt-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+    /* ── TEXT ANSWER ── */
+    .text-answer {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: 16px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 18px 20px;
+      resize: none;
+      outline: none;
+      line-height: 1.7;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      margin-top: 12px;
+    }
+    .text-answer:focus {
+      border-color: #e879f9;
+      box-shadow: 0 0 0 2px rgba(232,121,249,0.2);
+    }
+    .text-answer::placeholder { color: rgba(255,255,255,0.28); }
 
     /* ── BUTTONS ── */
     .btn-primary {
@@ -211,10 +262,7 @@
       letter-spacing: 1px;
       margin-bottom: 4px;
     }
-    .result-item .r-value {
-      color: #f0d4ff;
-      font-size: 0.95rem;
-    }
+    .result-item .r-value { color: #f0d4ff; font-size: 0.95rem; }
 
     .final-msg {
       background: linear-gradient(135deg, rgba(232,121,249,0.15), rgba(251,146,60,0.15));
@@ -270,23 +318,25 @@
 </head>
 <body>
 
-<!-- Floating hearts -->
 <div class="hearts-bg" id="heartsBg"></div>
 
 <div class="container">
+
+  <!-- Language switcher -->
+  <div class="lang-switch">
+    <button class="lang-btn active" id="lang-en" onclick="setLang('en')">English</button>
+    <span class="lang-sep">|</span>
+    <button class="lang-btn" id="lang-eu" onclick="setLang('eu')">Euskara</button>
+  </div>
 
   <!-- ── INTRO ── -->
   <div class="screen active" id="screen-intro">
     <div class="card">
       <span class="emoji-big">💌</span>
-      <h1>Hey, you.</h1>
-      <p>
-        I made this little quiz just for you.<br/>
-        Answer honestly — your answers will help me plan
-        the perfect time together. No pressure, just fun. 🌙
-      </p>
-      <p style="font-size:0.85rem; color:rgba(255,255,255,0.4);">7 quick questions · takes about 2 minutes</p>
-      <button class="btn-primary" onclick="startQuiz()">Let's go ✨</button>
+      <h1 id="intro-h1"></h1>
+      <p id="intro-p"></p>
+      <p id="intro-count" style="font-size:0.85rem; color:rgba(255,255,255,0.4);"></p>
+      <button class="btn-primary" id="intro-btn" onclick="startQuiz()"></button>
     </div>
   </div>
 
@@ -294,7 +344,7 @@
   <div class="screen" id="screen-quiz">
     <div class="card">
       <div class="progress-wrap">
-        <div class="progress-label">Question <span id="q-num">1</span> of 7</div>
+        <div class="progress-label" id="progress-label"></div>
         <div class="progress-bar-bg">
           <div class="progress-bar-fill" id="progress-fill" style="width:14%"></div>
         </div>
@@ -306,8 +356,8 @@
       <div class="options" id="options-container"></div>
 
       <div style="display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap;">
-        <button class="btn-ghost" onclick="prevQuestion()" id="btn-back">← Back</button>
-        <button class="btn-primary" onclick="nextQuestion()" id="btn-next" disabled>Continue →</button>
+        <button class="btn-ghost" onclick="prevQuestion()" id="btn-back"></button>
+        <button class="btn-primary" onclick="nextQuestion()" id="btn-next" disabled></button>
       </div>
     </div>
   </div>
@@ -316,7 +366,7 @@
   <div class="screen" id="screen-result">
     <div class="card">
       <span class="emoji-big" id="result-emoji">🎉</span>
-      <h1 id="result-title">Perfect!</h1>
+      <h1 id="result-title"></h1>
       <div class="stars">★ ★ ★ ★ ★</div>
       <p id="result-subtitle"></p>
 
@@ -324,106 +374,268 @@
 
       <div class="final-msg" id="final-msg"></div>
 
-      <p style="color:rgba(255,255,255,0.45); font-size:0.8rem; margin-bottom:4px;">Send your answers 👇</p>
+      <p id="copy-hint" style="color:rgba(255,255,255,0.45); font-size:0.8rem; margin-bottom:4px;"></p>
       <button class="btn-copy" id="btn-copy" onclick="copyAnswers()">
-        <span>📋</span><span>Copy answers to send</span>
+        <span id="copy-icon">📋</span><span id="copy-btn-text"></span>
       </button>
       <br/>
-      <button class="btn-ghost" onclick="restart()">Start over 🔄</button>
+      <button class="btn-ghost" id="restart-btn" onclick="restart()"></button>
     </div>
   </div>
 
 </div>
 
 <script>
-  const questions = [
-    {
-      id: "vibe",
-      text: "What's your ideal date vibe?",
-      sub: "Pick the one that feels most like you",
-      cols: 2,
-      options: [
-        { icon: "🕯️", label: "Romantic & cozy" },
-        { icon: "🎢", label: "Fun" },
-        { icon: "🍳", label: "Chill & low-key" },
-        { icon: "✨", label: "Fancy & special" },
-      ]
+  let lang = 'en';
+
+  const i18n = {
+    en: {
+      page_title:     "A Little Something for You 💌",
+      intro_h1:       "Hey, you.",
+      intro_p:        "I made this little quiz just for you.<br/>Answer honestly — your answers will help me plan the perfect time together. No pressure, just fun. 🌙",
+      intro_count:    "7 quick questions · takes about 2 minutes",
+      intro_btn:      "Let's go ✨",
+      progress_label: "Question {n} of {total}",
+      btn_back:       "← Back",
+      btn_continue:   "Continue →",
+      result_subtitle: "Here's what I know about our perfect night together:",
+      result_labels:  ["Vibe","Where","Food","After","Time","Music","What matters most"],
+      result_titles:  ["So romantic 💕","Adventure awaits 🎉","Keeping it easy 🍳","Something unforgettable ✨"],
+      result_emojis:  ["💕","🎉","🍳","🌟"],
+      final_prefix:   "The most important thing to you:",
+      final_suffix:   "I'll keep that in mind. 💫<br/><br/><em>So... are you free soon? 😊</em>",
+      copy_hint:      "Send your answers 👇",
+      copy_btn:       "Copy answers to send",
+      copied_btn:     "Copied! Send it now",
+      copy_header:    "💌 *My Date Quiz Answers*",
+      copy_labels:    ["Vibe","Where","Food","After","Time","Music","What matters most"],
+      copy_footer:    "✨ Now you know what I want — plan accordingly 😄",
+      restart_btn:    "Start over 🔄",
+      questions: [
+        {
+          id: "vibe",
+          text: "What's your ideal date vibe?",
+          sub: "Pick the one that feels most like you",
+          cols: 2,
+          options: [
+            { icon: "🕯️", label: "Romantic & cozy" },
+            { icon: "🎢", label: "Fun & adventurous" },
+            { icon: "🍳", label: "Chill & low-key" },
+            { icon: "✨", label: "Fancy & special" },
+          ]
+        },
+        {
+          id: "setting",
+          text: "Inside or outside?",
+          sub: "Where do you feel most comfortable?",
+          cols: 2,
+          options: [
+            { icon: "🌿", label: "Outside — fresh air!" },
+            { icon: "🏠", label: "Indoors — cozy vibes" },
+            { icon: "🌅", label: "Rooftop / terrace" },
+          ]
+        },
+        {
+          id: "food",
+          text: "What kind of food are you in the mood for?",
+          sub: "Be honest — this is important 😄",
+          cols: 2,
+          options: [
+            { icon: "🍕", label: "Pizza or comfort food" },
+            { icon: "🥩", label: "Steakhouse / grill" },
+            { icon: "🌮", label: "Tacos" },
+            { icon: "🍝", label: "Italian restaurant" },
+            { icon: "🥗", label: "Light & healthy" },
+          ]
+        },
+        {
+          id: "activity",
+          text: "After dinner — what sounds fun?",
+          sub: "Pick your favourite follow-up activity",
+          cols: 2,
+          options: [
+            { icon: "🎬", label: "Movie or series" },
+            { icon: "🎳", label: "Bowling / arcade" },
+            { icon: "🚶", label: "Walk under the stars" },
+            { icon: "🍸", label: "Drinks & deep talk" },
+          ]
+        },
+        {
+          id: "time",
+          text: "What time works best for you?",
+          sub: "Purely for planning — no trick questions!",
+          cols: 2,
+          options: [
+            { icon: "☀️", label: "Afternoon" },
+            { icon: "🌇", label: "Early evening" },
+            { icon: "🌙", label: "Night" },
+          ]
+        },
+        {
+          id: "music",
+          text: "What's on the playlist?",
+          sub: "Background soundtrack to the night",
+          cols: 2,
+          options: [
+            { icon: "🎷", label: "Jazz / Lo-fi" },
+            { icon: "🎸", label: "Indie / Alternative" },
+            { icon: "💿", label: "Pop / R&B" },
+            { icon: "🎵", label: "Whatever feels right" },
+          ]
+        },
+        {
+          id: "important",
+          type: "text",
+          text: "What matters most to you on a date?",
+          sub: "Tell me in your own words... 💭",
+          placeholder: "Write whatever comes to mind...",
+          cols: 1,
+        },
+      ],
     },
-    {
-      id: "setting",
-      text: "Inside or outside?",
-      sub: "Where do you feel most comfortable?",
-      cols: 2,
-      options: [
-        { icon: "🌿", label: "Outside — fresh air!" },
-        { icon: "🏠", label: "Indoors — cozy vibes" },
-        { icon: "🌅", label: "Rooftop / terrace" },
-      ]
+
+    eu: {
+      page_title:     "Zerbait Berezia Zuretzat 💌",
+      intro_h1:       "Aizu, zu.",
+      intro_p:        "Quiz txiki hau zuretzat sortu dut.<br/>Erantzun zintzoki — zure erantzunek gure une perfektua planifikatzen lagunduko didate. Presiorik gabe, dibertitu besterik ez. 🌙",
+      intro_count:    "7 galdera azkar · 2 minutu inguru",
+      intro_btn:      "Goazen ✨",
+      progress_label: "{n}. galdera / {total}",
+      btn_back:       "← Atzera",
+      btn_continue:   "Jarraitu →",
+      result_subtitle: "Hau da gure gau perfektuari buruz dakidana:",
+      result_labels:  ["Giroa","Non","Janaria","Ostean","Ordua","Musika","Garrantzitsuena"],
+      result_titles:  ["Hain erromantikoa 💕","Abentura zain 🎉","Lasai eta arin 🍳","Ahazteziña ✨"],
+      result_emojis:  ["💕","🎉","🍳","🌟"],
+      final_prefix:   "Zuretzat garrantzitsuena:",
+      final_suffix:   "Gogoan izango dut. 💫<br/><br/><em>Ba... libre al zaude laster? 😊</em>",
+      copy_hint:      "Bidali zure erantzunak 👇",
+      copy_btn:       "Kopiatu bidalteko",
+      copied_btn:     "Kopiatua! Bidali orain",
+      copy_header:    "💌 *Nire Date Quiz Erantzunak*",
+      copy_labels:    ["Giroa","Non","Janaria","Ostean","Ordua","Musika","Garrantzitsuena"],
+      copy_footer:    "✨ Orain badakizu zer nahi dudan — planifika ezazu 😄",
+      restart_btn:    "Berriz hasi 🔄",
+      questions: [
+        {
+          id: "vibe",
+          text: "Zein da zure date idealaren giroa?",
+          sub: "Aukeratu zureri gehien datorkiona",
+          cols: 2,
+          options: [
+            { icon: "🕯️", label: "Erromantikoa eta goxoa" },
+            { icon: "🎢", label: "Dibertigarria eta ausarta" },
+            { icon: "🍳", label: "Lasai-lasai" },
+            { icon: "✨", label: "Dotore eta berezia" },
+          ]
+        },
+        {
+          id: "setting",
+          text: "Barruan ala kanpoan?",
+          sub: "Non sentitzen zara erosoena?",
+          cols: 2,
+          options: [
+            { icon: "🌿", label: "Kanpoan — aire freskoa!" },
+            { icon: "🏠", label: "Barruan — giro goxoa" },
+            { icon: "🌅", label: "Teilatupea / terraza" },
+          ]
+        },
+        {
+          id: "food",
+          text: "Ze janari mota nahi duzu?",
+          sub: "Esan egia — garrantzitsua da 😄",
+          cols: 2,
+          options: [
+            { icon: "🍕", label: "Pizza edo janari goxoa" },
+            { icon: "🥩", label: "Haragia / parrilla" },
+            { icon: "🌮", label: "Tacos" },
+            { icon: "🍝", label: "Italiar jatetxea" },
+            { icon: "🥗", label: "Arina eta osasuntsua" },
+          ]
+        },
+        {
+          id: "activity",
+          text: "Afariaren ostean — zer egitea gustatuko litzaizuke?",
+          sub: "Aukeratu zure jarduera gogokoen",
+          cols: 2,
+          options: [
+            { icon: "🎬", label: "Filma edo serie bat" },
+            { icon: "🎳", label: "Bowling / arcade" },
+            { icon: "🚶", label: "Izarren azpian ibilaldi bat" },
+            { icon: "🍸", label: "Edaria eta elkarrizketa sakona" },
+          ]
+        },
+        {
+          id: "time",
+          text: "Ze ordutan nahi duzu?",
+          sub: "Planifikaziorako bakarrik — ez dago tranpako galderarik!",
+          cols: 2,
+          options: [
+            { icon: "☀️", label: "Arratsaldez" },
+            { icon: "🌇", label: "Iluntzean" },
+            { icon: "🌙", label: "Gauez" },
+          ]
+        },
+        {
+          id: "music",
+          text: "Zer dago zerrendan?",
+          sub: "Gauaren soinu-banda",
+          cols: 2,
+          options: [
+            { icon: "🎷", label: "Jazz / Lo-fi" },
+            { icon: "🎸", label: "Indie / Alternatiboa" },
+            { icon: "💿", label: "Pop / R&B" },
+            { icon: "🎵", label: "Momentuak esaten duena" },
+          ]
+        },
+        {
+          id: "important",
+          type: "text",
+          text: "Zer da zuretzat garrantzitsuena date batean?",
+          sub: "Esan iezadazu zure hitzetan... 💭",
+          placeholder: "Idatzi gogora datorkizuna...",
+          cols: 1,
+        },
+      ],
     },
-    {
-      id: "food",
-      text: "What kind of food are you in the mood for?",
-      sub: "Be honest — this is important 😄",
-      cols: 2,
-      options: [
-        { icon: "🍕", label: "Pizza or comfort food" },
-        { icon: "🥩", label: "Steakhouse / grill" },
-        { icon: "🌮", label: "Tacos" },
-        { icon: "🍝", label: "Italian restaurant" },
-        { icon: "🥗", label: "Light & healthy" },
-      ]
-    },
-    {
-      id: "activity",
-      text: "After dinner — what sounds fun?",
-      sub: "Pick your favourite follow-up activity",
-      cols: 2,
-      options: [
-        { icon: "🎬", label: "Movie or series" },
-        { icon: "🎳", label: "Bowling / arcade" },
-        { icon: "🚶", label: "Walk under the stars" },
-        { icon: "🍸", label: "Drinks & deep talk" },
-      ]
-    },
-    {
-      id: "time",
-      text: "What time works best for you?",
-      sub: "Purely for planning — no trick questions!",
-      cols: 2,
-      options: [
-        { icon: "☀️", label: "Afternoon" },
-        { icon: "🌇", label: "Early evening" },
-        { icon: "🌙", label: "Night" },
-      ]
-    },
-    {
-      id: "music",
-      text: "What's on the playlist?",
-      sub: "Background soundtrack to the night",
-      cols: 2,
-      options: [
-        { icon: "🎷", label: "Jazz / Lo-fi" },
-        { icon: "🎸", label: "Indie / Alternative" },
-        { icon: "💿", label: "Pop / R&B" },
-        { icon: "🎵", label: "Whatever feels right" },
-      ]
-    },
-    {
-      id: "feel",
-      text: "Most importantly — how do you want to feel?",
-      sub: "The real one 💫",
-      cols: 1,
-      options: [
-        { icon: "😂", label: "Laughing the whole time" },
-        { icon: "🦋", label: "That butterfly feeling" },
-        { icon: "🤗", label: "Safe, comfortable, at ease" },
-        { icon: "🌟", label: "Like it's something special" },
-      ]
-    },
-  ];
+  };
 
   const answers = {};
   let current = 0;
+
+  function t(key) { return i18n[lang][key]; }
+  function getQuestions() { return i18n[lang].questions; }
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function setLang(newLang) {
+    lang = newLang;
+    document.title = t('page_title');
+    document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+    document.getElementById('lang-eu').classList.toggle('active', lang === 'eu');
+
+    const active = document.querySelector('.screen.active');
+    if (active.id === 'screen-quiz') {
+      renderQuestion();
+    } else if (active.id === 'screen-result') {
+      showResult();
+    } else {
+      renderIntro();
+    }
+  }
+
+  function renderIntro() {
+    document.getElementById('intro-h1').textContent    = t('intro_h1');
+    document.getElementById('intro-p').innerHTML       = t('intro_p');
+    document.getElementById('intro-count').textContent = t('intro_count');
+    document.getElementById('intro-btn').textContent   = t('intro_btn');
+  }
 
   function spawnHearts() {
     const bg = document.getElementById('heartsBg');
@@ -439,7 +651,6 @@
       bg.appendChild(el);
     }
   }
-  spawnHearts();
 
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -453,18 +664,41 @@
   }
 
   function renderQuestion() {
+    const questions = getQuestions();
     const q = questions[current];
-    document.getElementById('q-num').textContent = current + 1;
+
+    document.getElementById('progress-label').textContent =
+      t('progress_label').replace('{n}', current + 1).replace('{total}', questions.length);
     document.getElementById('q-text').textContent = q.text;
-    document.getElementById('q-sub').textContent = q.sub;
+    document.getElementById('q-sub').textContent  = q.sub;
 
     const fill = ((current + 1) / questions.length) * 100;
     document.getElementById('progress-fill').style.width = fill + '%';
 
+    document.getElementById('btn-back').textContent = t('btn_back');
+    document.getElementById('btn-back').style.display = current === 0 ? 'none' : 'inline-block';
+    document.getElementById('btn-next').textContent = t('btn_continue');
+
     const container = document.getElementById('options-container');
     container.innerHTML = '';
-    container.className = 'options' + (q.cols === 1 ? ' single-col' : '');
 
+    if (q.type === 'text') {
+      container.className = 'options single-col';
+      const ta = document.createElement('textarea');
+      ta.className = 'text-answer';
+      ta.placeholder = q.placeholder;
+      ta.rows = 5;
+      ta.value = answers[q.id] || '';
+      ta.oninput = () => {
+        answers[q.id] = ta.value;
+        document.getElementById('btn-next').disabled = !ta.value.trim();
+      };
+      container.appendChild(ta);
+      document.getElementById('btn-next').disabled = !(answers[q.id] && answers[q.id].trim());
+      return;
+    }
+
+    container.className = 'options' + (q.cols === 1 ? ' single-col' : '');
     q.options.forEach((opt, idx) => {
       const btn = document.createElement('button');
       btn.className = 'option-btn' + (answers[q.id] === idx ? ' selected' : '');
@@ -474,7 +708,6 @@
     });
 
     document.getElementById('btn-next').disabled = answers[q.id] === undefined;
-    document.getElementById('btn-back').style.display = current === 0 ? 'none' : 'inline-block';
   }
 
   function selectOption(qId, idx) {
@@ -486,7 +719,13 @@
   }
 
   function nextQuestion() {
-    if (answers[questions[current].id] === undefined) return;
+    const questions = getQuestions();
+    const q = questions[current];
+    if (q.type === 'text') {
+      if (!answers[q.id] || !answers[q.id].trim()) return;
+    } else {
+      if (answers[q.id] === undefined) return;
+    }
     if (current < questions.length - 1) {
       current++;
       renderQuestion();
@@ -500,96 +739,100 @@
   }
 
   function showResult() {
-    const get = (id) => questions.find(q => q.id === id)
-      .options[answers[id]];
+    const questions = getQuestions();
+    const T = i18n[lang];
 
-    // Pick emoji & title based on vibe
-    const vibes = ["💕","🎉","🍳","🌟"];
-    const titles = ["So romantic 💕","Adventure awaits 🎉","Keeping it easy 🍳","Something unforgettable ✨"];
     const vibeIdx = answers["vibe"] ?? 0;
+    document.getElementById('result-emoji').textContent   = T.result_emojis[vibeIdx];
+    document.getElementById('result-title').textContent   = T.result_titles[vibeIdx];
+    document.getElementById('result-subtitle').textContent = T.result_subtitle;
 
-    document.getElementById('result-emoji').textContent = vibes[vibeIdx];
-    document.getElementById('result-title').textContent = titles[vibeIdx];
-    document.getElementById('result-subtitle').textContent =
-      "Here's what I know about our perfect night together:";
-
-    const labels = ["Vibe","Where","Food","After","Time","Music","Feeling"];
-    const ids = ["vibe","setting","food","activity","time","music","feel"];
-    const grid = document.getElementById('result-grid');
+    const ids    = ["vibe","setting","food","activity","time","music","important"];
+    const labels = T.result_labels;
+    const grid   = document.getElementById('result-grid');
     grid.innerHTML = '';
+
     ids.forEach((id, i) => {
-      const opt = get(id);
+      const q = questions.find(q => q.id === id);
       const div = document.createElement('div');
       div.className = 'result-item';
-      div.innerHTML = `<div class="r-label">${labels[i]}</div>
-                       <div class="r-value">${opt.icon} ${opt.label}</div>`;
+
+      if (q.type === 'text') {
+        const raw = answers[id] || '';
+        const display = raw.length > 80 ? raw.slice(0, 77) + '…' : raw;
+        div.innerHTML = `<div class="r-label">${labels[i]}</div>
+                         <div class="r-value" style="font-size:0.88rem; font-style:italic;">"${esc(display)}"</div>`;
+        div.style.gridColumn = '1 / -1';
+      } else {
+        const opt = q.options[answers[id]];
+        div.innerHTML = `<div class="r-label">${labels[i]}</div>
+                         <div class="r-value">${opt.icon} ${opt.label}</div>`;
+      }
       grid.appendChild(div);
     });
 
-    const feelOpt = get("feel");
-    const feelMsgs = [
-      "I'll make sure you're laughing all night — promise. 😄",
-      "I can't promise I won't give you butterflies... actually, I can't promise at all. 🦋",
-      "No pressure, no rush.... just us. 🤗",
-    ];
-    const feelMsg = feelMsgs[answers["feel"] ?? 0];
-
+    const importantText = answers["important"] || "—";
     document.getElementById('final-msg').innerHTML =
-      `You want to feel <strong>${feelOpt.label.toLowerCase()}</strong>.<br/>
-       ${feelMsg}<br/><br/>
-       <em>So... are you free soon? 😊</em>`;
+      `${T.final_prefix}<br/>
+       <strong style="color:#f0d4ff; font-size:1.05rem;">"${esc(importantText)}"</strong>
+       <br/><br/>${T.final_suffix}`;
+
+    document.getElementById('copy-hint').textContent    = T.copy_hint;
+    document.getElementById('copy-btn-text').textContent = T.copy_btn;
+    document.getElementById('restart-btn').textContent   = T.restart_btn;
 
     showScreen('result');
   }
 
   function copyAnswers() {
-    const get = (id) => questions.find(q => q.id === id).options[answers[id]];
-    const labels = ["Vibe","Where","Food","After","Time","Music","Feeling"];
-    const ids    = ["vibe","setting","food","activity","time","music","feel"];
+    const questions = getQuestions();
+    const T = i18n[lang];
+    const ids    = ["vibe","setting","food","activity","time","music","important"];
+    const labels = T.copy_labels;
 
     const lines = ids.map((id, i) => {
-      const opt = get(id);
+      const q = questions.find(q => q.id === id);
+      if (q.type === 'text') return `💭 *${labels[i]}:* ${answers[id] || '—'}`;
+      const opt = q.options[answers[id]];
       return `${opt.icon} *${labels[i]}:* ${opt.label}`;
     });
 
-    const text =
-      `💌 *My Date Quiz Answers*\n\n` +
-      lines.join('\n') +
-      `\n\n✨ Now you know what I want — plan accordingly 😄`;
+    const text = `${T.copy_header}\n\n${lines.join('\n')}\n\n${T.copy_footer}`;
 
-    navigator.clipboard.writeText(text).then(() => {
+    function markCopied() {
       const btn = document.getElementById('btn-copy');
       btn.classList.add('copied');
-      btn.innerHTML = '<span>✅</span><span>Copied! Send it now</span>';
+      document.getElementById('copy-icon').textContent    = '✅';
+      document.getElementById('copy-btn-text').textContent = T.copied_btn;
       setTimeout(() => {
         btn.classList.remove('copied');
-        btn.innerHTML = '<span>📋</span><span>Copy answers to send</span>';
+        document.getElementById('copy-icon').textContent    = '📋';
+        document.getElementById('copy-btn-text').textContent = T.copy_btn;
       }, 3000);
-    }).catch(() => {
-      /* fallback for browsers that block clipboard without interaction */
+    }
+
+    navigator.clipboard.writeText(text).then(markCopied).catch(() => {
       const ta = document.createElement('textarea');
       ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
+      ta.style.cssText = 'position:fixed;opacity:0;';
       document.body.appendChild(ta);
       ta.focus(); ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-      const btn = document.getElementById('btn-copy');
-      btn.classList.add('copied');
-      btn.innerHTML = '<span>✅</span><span>Copied! Send it now</span>';
-      setTimeout(() => {
-        btn.classList.remove('copied');
-        btn.innerHTML = '<span>📋</span><span>Copy answers to send</span>';
-      }, 3000);
+      markCopied();
     });
   }
 
   function restart() {
     Object.keys(answers).forEach(k => delete answers[k]);
     current = 0;
+    renderIntro();
     showScreen('intro');
   }
+
+  // Init
+  spawnHearts();
+  renderIntro();
 </script>
 </body>
 </html>
