@@ -401,7 +401,7 @@
 <section class="section" id="escolha">
   <div class="section-head">
     <h2>Onde você tem vontade de pensar no mundo hoje?</h2>
-    <p>Quatro mirantes, quatro vistas diferentes sobre a cidade. Escolha o que mais te chamar a atenção — o resto eu cuido.</p>
+    <p>Cinco lugares, cinco vistas diferentes. Escolha o que mais te chamar a atenção — o resto eu cuido.</p>
   </div>
 
   <div class="places-grid" id="places">
@@ -428,7 +428,7 @@
       <div class="check-badge">✓</div>
       <div class="place-overlay">
         <h3>Santa Luzia</h3>
-        <p>Alfama aos nossos pés, azulejos antigos, glicínias na treliça. O mais romântico dos quatro, sem dúvida.</p>
+        <p>Alfama aos nossos pés, azulejos antigos, glicínias na treliça. O mais romântico de todos, sem dúvida.</p>
       </div>
     </div>
 
@@ -438,6 +438,15 @@
       <div class="place-overlay">
         <h3>São Pedro de Alcântara</h3>
         <p>Jardim com sombra, um café por perto, vista direta para o castelo. Bom para chegar mais cedo e ficar até escurecer.</p>
+      </div>
+    </div>
+
+    <div class="place-card" data-name="Costa da Caparica">
+      <img src="images/costa-da-caparica.jpg" alt="Costa da Caparica">
+      <div class="check-badge">✓</div>
+      <div class="place-overlay">
+        <h3>Costa da Caparica</h3>
+        <p>Se você preferir trocar a cidade pelo mar — praia grande, pôr do sol direto sobre o Atlântico. Uns 30-40 minutos daqui, dá tempo de sobra a partir das 16h.</p>
       </div>
     </div>
   </div>
@@ -480,7 +489,7 @@
 
   sendBtn.addEventListener('click', () => {
     if (!chosen) return;
-    const msg = encodeURIComponent('Escolhi o ' + chosen + ' para amanhã depois das 16h 🌇');
+    const msg = encodeURIComponent('Escolhi: ' + chosen + ' — para amanhã depois das 16h 🌇');
     window.open('https://wa.me/?text=' + msg, '_blank');
   });
 </script>
