@@ -1,838 +1,396 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A Little Something for You 💌</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>um convite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dusk-1:#2b1b3d;
+    --dusk-2:#5a2c52;
+    --coral:#e8703a;
+    --peach:#f3a468;
+    --azulejo:#2f5d78;
+    --azulejo-light:#bcd8e0;
+    --cream:#fbf3ea;
+    --ink:#241a2e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter', sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+  }
 
-    body {
-      font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 40%, #1a0a2e 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow-x: hidden;
-    }
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:32px 20px 60px;
+    overflow:hidden;
+    background:linear-gradient(180deg, var(--dusk-1) 0%, var(--dusk-2) 32%, var(--coral) 68%, var(--peach) 100%);
+    background-size:100% 220%;
+    animation:duskShift 14s ease-in-out infinite alternate;
+  }
+  @keyframes duskShift{
+    0%{background-position:0% 0%;}
+    100%{background-position:0% 100%;}
+  }
+  .sun{
+    position:absolute;
+    bottom:8%;
+    width:150px; height:150px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #fff2d9, #ffcf7f 45%, var(--coral) 100%);
+    box-shadow:0 0 90px 25px rgba(255,190,120,0.45);
+    animation:rise 4.5s ease-out forwards;
+    opacity:0;
+  }
+  @keyframes rise{
+    0%{opacity:0; transform:translateY(60px) scale(0.7);}
+    100%{opacity:1; transform:translateY(0) scale(1);}
+  }
+  .skyline{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    height:22%;
+    background:var(--ink);
+    clip-path:polygon(0% 100%,0% 55%,3% 55%,3% 40%,7% 40%,7% 60%,11% 60%,11% 30%,13% 30%,13% 62%,18% 62%,18% 45%,22% 45%,22% 65%,27% 65%,27% 20%,29% 20%,29% 66%,34% 66%,34% 50%,38% 50%,38% 68%,44% 68%,44% 25%,47% 25%,47% 15%,49% 15%,49% 30%,52% 30%,52% 68%,58% 68%,58% 42%,63% 42%,63% 66%,68% 66%,68% 35%,72% 35%,72% 64%,77% 64%,77% 48%,81% 48%,81% 68%,87% 68%,87% 30%,90% 30%,90% 62%,95% 62%,95% 45%,100% 45%,100% 100%);
+    opacity:0.9;
+  }
+  .hero-content{position:relative; z-index:2; max-width:640px;}
+  .eyebrow-line{
+    font-size:0.95rem;
+    color:rgba(255,255,255,0.85);
+    margin-bottom:14px;
+    letter-spacing:0.02em;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(2.4rem, 7vw, 4.2rem);
+    line-height:1.05;
+    color:#fff;
+    text-shadow:0 4px 30px rgba(0,0,0,0.25);
+  }
+  h1 em{
+    font-style:italic;
+    font-weight:500;
+    color:#ffe7c2;
+  }
+  .hero-sub{
+    margin-top:22px;
+    font-size:1.15rem;
+    color:rgba(255,255,255,0.92);
+    line-height:1.6;
+  }
+  .details{
+    margin-top:34px;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .pill{
+    background:rgba(255,255,255,0.16);
+    border:1px solid rgba(255,255,255,0.35);
+    backdrop-filter:blur(6px);
+    color:#fff;
+    padding:10px 20px;
+    border-radius:999px;
+    font-size:0.95rem;
+  }
+  .scroll-hint{
+    position:absolute;
+    bottom:26px; left:50%;
+    transform:translateX(-50%);
+    color:rgba(255,255,255,0.75);
+    font-size:0.85rem;
+    z-index:2;
+    animation:bob 2s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{transform:translate(-50%,0);}
+    50%{transform:translate(-50%,6px);}
+  }
 
-    /* Floating hearts background */
-    .hearts-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .heart-float {
-      position: absolute;
-      bottom: -50px;
-      font-size: 1.2rem;
-      opacity: 0;
-      animation: floatUp linear infinite;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(0) rotate(0deg);   opacity: 0; }
-      10%  { opacity: 0.4; }
-      90%  { opacity: 0.2; }
-      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-    }
+  /* ---------- BODY ---------- */
+  .section{
+    max-width:920px;
+    margin:0 auto;
+    padding:80px 24px;
+  }
+  .section-head{
+    text-align:center;
+    margin-bottom:48px;
+  }
+  .section-head h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(1.7rem, 4vw, 2.4rem);
+    color:var(--dusk-1);
+  }
+  .section-head p{
+    margin-top:12px;
+    color:#5c5163;
+    font-size:1.05rem;
+    max-width:520px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.6;
+  }
 
-    .container {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 640px;
-      padding: 20px;
-    }
+  .places-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:22px;
+  }
+  @media (max-width:640px){
+    .places-grid{grid-template-columns:1fr;}
+  }
+  .place-card{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    cursor:pointer;
+    background:#000;
+    aspect-ratio:4/5;
+    border:3px solid transparent;
+    transition:border-color 0.25s ease, transform 0.25s ease;
+  }
+  .place-card img{
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0.82;
+    transition:transform 0.5s ease, opacity 0.3s ease;
+  }
+  .place-card:hover img{transform:scale(1.06); opacity:0.92;}
+  .place-card:hover{transform:translateY(-3px);}
+  .place-card.selected{
+    border-color:var(--coral);
+    transform:translateY(-3px);
+  }
+  .place-card.selected img{opacity:1;}
+  .place-overlay{
+    position:absolute; left:0; right:0; bottom:0;
+    padding:18px 16px 16px;
+    background:linear-gradient(0deg, rgba(20,10,25,0.92) 10%, rgba(20,10,25,0.45) 60%, transparent 100%);
+    color:#fff;
+  }
+  .place-overlay h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.15rem;
+    margin-bottom:4px;
+  }
+  .place-overlay p{
+    font-size:0.85rem;
+    color:rgba(255,255,255,0.85);
+    line-height:1.4;
+  }
+  .check-badge{
+    position:absolute; top:12px; right:12px;
+    width:30px; height:30px;
+    border-radius:50%;
+    background:var(--coral);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+    font-size:1rem;
+    opacity:0;
+    transform:scale(0.5);
+    transition:opacity 0.25s ease, transform 0.25s ease;
+  }
+  .place-card.selected .check-badge{
+    opacity:1;
+    transform:scale(1);
+  }
 
-    /* ── LANGUAGE SWITCH ── */
-    .lang-switch {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .lang-btn {
-      background: rgba(255,255,255,0.07);
-      border: 1.5px solid rgba(255,255,255,0.18);
-      color: rgba(255,255,255,0.55);
-      font-family: inherit;
-      font-size: 0.8rem;
-      padding: 6px 20px;
-      border-radius: 50px;
-      cursor: pointer;
-      letter-spacing: 1px;
-      transition: all 0.2s;
-    }
-    .lang-btn.active {
-      background: rgba(232,121,249,0.2);
-      border-color: #e879f9;
-      color: #fff;
-    }
-    .lang-btn:hover:not(.active) {
-      border-color: rgba(255,255,255,0.35);
-      color: rgba(255,255,255,0.85);
-    }
-    .lang-sep { color: rgba(255,255,255,0.2); font-size: 0.9rem; }
+  /* ---------- CONFIRM ---------- */
+  .confirm-wrap{
+    text-align:center;
+    margin-top:44px;
+  }
+  .confirm-status{
+    font-size:1rem;
+    color:var(--azulejo);
+    margin-bottom:18px;
+    min-height:1.4em;
+  }
+  .cta{
+    display:inline-block;
+    background:var(--coral);
+    color:#fff;
+    border:none;
+    padding:16px 36px;
+    border-radius:999px;
+    font-family:'Inter', sans-serif;
+    font-size:1.05rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:transform 0.2s ease, background 0.2s ease;
+    text-decoration:none;
+  }
+  .cta:hover{transform:translateY(-2px); background:#d75f2c;}
+  .cta:disabled{
+    background:#d9c9c1;
+    cursor:not-allowed;
+    transform:none;
+  }
 
-    /* ── SCREENS ── */
-    .screen { display: none; animation: fadeIn 0.6s ease; }
-    .screen.active { display: block; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+  footer{
+    text-align:center;
+    padding:50px 24px 60px;
+    color:#8a7f8f;
+    font-size:0.9rem;
+    background:var(--cream);
+  }
+  footer .tile-strip{
+    width:64px; height:8px;
+    margin:0 auto 18px;
+    background:repeating-linear-gradient(90deg, var(--azulejo) 0 8px, var(--azulejo-light) 8px 16px);
+    border-radius:4px;
+  }
 
-    /* ── CARD ── */
-    .card {
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 28px;
-      padding: 48px 40px;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-      text-align: center;
-    }
+  /* ---------- MOBILE (iPhone 14 ≈ 390px) ---------- */
+  @media (max-width:430px){
+    .hero{ padding:28px 18px 48px; }
+    .sun{ width:110px; height:110px; bottom:10%; }
+    h1{ font-size:2.15rem; }
+    .eyebrow-line{ font-size:0.85rem; }
+    .hero-sub{ font-size:1rem; margin-top:18px; }
+    .details{ margin-top:26px; gap:10px; }
+    .pill{ padding:8px 16px; font-size:0.85rem; }
+    .scroll-hint{ bottom:16px; font-size:0.78rem; }
 
-    .card .emoji-big { font-size: 4rem; margin-bottom: 16px; display: block; }
+    .section{ padding:56px 18px; }
+    .section-head{ margin-bottom:34px; }
+    .section-head h2{ font-size:1.5rem; }
+    .section-head p{ font-size:0.95rem; }
 
-    h1 {
-      color: #fff;
-      font-size: 2rem;
-      font-weight: normal;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-    }
-    h2 {
-      color: #e8c5f0;
-      font-size: 1.35rem;
-      font-weight: normal;
-      margin-bottom: 8px;
-    }
-    p {
-      color: rgba(255,255,255,0.7);
-      font-size: 1rem;
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
+    .places-grid{ gap:16px; }
+    .place-card{ aspect-ratio:16/11; border-radius:16px; }
+    .place-overlay{ padding:14px 14px 12px; }
+    .place-overlay h3{ font-size:1.05rem; }
+    .place-overlay p{ font-size:0.82rem; }
+    .check-badge{ width:26px; height:26px; font-size:0.9rem; top:10px; right:10px; }
 
-    /* ── PROGRESS BAR ── */
-    .progress-wrap { margin-bottom: 28px; }
-    .progress-label {
-      color: rgba(255,255,255,0.5);
-      font-size: 0.8rem;
-      margin-bottom: 6px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .progress-bar-bg {
-      height: 4px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #e879f9, #fb923c);
-      border-radius: 4px;
-      transition: width 0.5s ease;
-    }
+    .confirm-wrap{ margin-top:32px; }
+    .cta{ width:100%; padding:15px 0; font-size:1rem; }
 
-    /* ── OPTIONS ── */
-    .options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 24px;
-    }
-    .options.single-col { grid-template-columns: 1fr; }
+    footer{ padding:40px 20px 48px; font-size:0.85rem; }
+  }
 
-    .option-btn {
-      background: rgba(255,255,255,0.07);
-      border: 1.5px solid rgba(255,255,255,0.18);
-      border-radius: 16px;
-      color: #fff;
-      font-family: inherit;
-      font-size: 0.95rem;
-      padding: 16px 14px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-align: left;
-    }
-    .option-btn:hover {
-      background: rgba(232,121,249,0.2);
-      border-color: #e879f9;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(232,121,249,0.25);
-    }
-    .option-btn.selected {
-      background: linear-gradient(135deg, rgba(232,121,249,0.3), rgba(251,146,60,0.3));
-      border-color: #e879f9;
-      box-shadow: 0 0 0 2px rgba(232,121,249,0.4);
-    }
-    .option-btn .opt-icon { font-size: 1.4rem; flex-shrink: 0; }
-
-    /* ── TEXT ANSWER ── */
-    .text-answer {
-      width: 100%;
-      background: rgba(255,255,255,0.07);
-      border: 1.5px solid rgba(255,255,255,0.18);
-      border-radius: 16px;
-      color: #fff;
-      font-family: inherit;
-      font-size: 1rem;
-      padding: 18px 20px;
-      resize: none;
-      outline: none;
-      line-height: 1.7;
-      transition: border-color 0.25s, box-shadow 0.25s;
-      margin-top: 12px;
-    }
-    .text-answer:focus {
-      border-color: #e879f9;
-      box-shadow: 0 0 0 2px rgba(232,121,249,0.2);
-    }
-    .text-answer::placeholder { color: rgba(255,255,255,0.28); }
-
-    /* ── BUTTONS ── */
-    .btn-primary {
-      display: inline-block;
-      margin-top: 28px;
-      padding: 16px 48px;
-      background: linear-gradient(135deg, #e879f9, #fb923c);
-      color: #fff;
-      font-family: inherit;
-      font-size: 1rem;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: all 0.25s ease;
-      box-shadow: 0 8px 32px rgba(232,121,249,0.35);
-    }
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(232,121,249,0.5);
-    }
-    .btn-primary:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border: 1.5px solid rgba(255,255,255,0.25);
-      color: rgba(255,255,255,0.7);
-      font-family: inherit;
-      font-size: 0.9rem;
-      padding: 10px 28px;
-      border-radius: 50px;
-      cursor: pointer;
-      margin-top: 14px;
-      transition: all 0.2s;
-    }
-    .btn-ghost:hover { border-color: #e879f9; color: #e879f9; }
-
-    /* ── RESULT SCREEN ── */
-    .result-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 24px 0;
-      text-align: left;
-    }
-    .result-item {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 14px;
-    }
-    .result-item .r-label {
-      color: rgba(255,255,255,0.45);
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-    }
-    .result-item .r-value { color: #f0d4ff; font-size: 0.95rem; }
-
-    .final-msg {
-      background: linear-gradient(135deg, rgba(232,121,249,0.15), rgba(251,146,60,0.15));
-      border: 1px solid rgba(232,121,249,0.3);
-      border-radius: 16px;
-      padding: 20px 24px;
-      color: #fff;
-      font-size: 1rem;
-      line-height: 1.7;
-      margin: 20px 0;
-    }
-
-    .stars {
-      color: #e879f9;
-      font-size: 1.3rem;
-      letter-spacing: 4px;
-      margin: 8px 0;
-    }
-
-    .btn-copy {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 14px;
-      padding: 14px 32px;
-      background: rgba(255,255,255,0.08);
-      border: 1.5px solid rgba(255,255,255,0.25);
-      color: #fff;
-      font-family: inherit;
-      font-size: 0.95rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-    .btn-copy:hover {
-      background: rgba(255,255,255,0.15);
-      border-color: #e879f9;
-      color: #e879f9;
-    }
-    .btn-copy.copied {
-      background: rgba(52,211,153,0.15);
-      border-color: #34d399;
-      color: #34d399;
-    }
-
-    @media (max-width: 480px) {
-      .card { padding: 32px 24px; }
-      h1 { font-size: 1.6rem; }
-      .options { grid-template-columns: 1fr; }
-      .result-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+  @media (hover:none){
+    .place-card:hover img{ transform:none; opacity:0.82; }
+    .place-card:hover{ transform:none; }
+    .place-card.selected img{ opacity:1; }
+  }
+</style>
 </head>
 <body>
 
-<div class="hearts-bg" id="heartsBg"></div>
-
-<div class="container">
-
-  <!-- Language switcher -->
-  <div class="lang-switch">
-    <button class="lang-btn active" id="lang-en" onclick="setLang('en')">English</button>
-    <span class="lang-sep">|</span>
-    <button class="lang-btn" id="lang-eu" onclick="setLang('eu')">Euskara</button>
-  </div>
-
-  <!-- ── INTRO ── -->
-  <div class="screen active" id="screen-intro">
-    <div class="card">
-      <span class="emoji-big">🇧🇷🇪🇸</span>
-      <h1 id="intro-h1"></h1>
-      <p id="intro-p"></p>
-      <p id="intro-count" style="font-size:0.85rem; color:rgba(255,255,255,0.4);"></p>
-      <button class="btn-primary" id="intro-btn" onclick="startQuiz()"></button>
+<section class="hero">
+  <div class="skyline"></div>
+  <div class="sun"></div>
+  <div class="hero-content">
+    <p class="eyebrow-line">para ti</p>
+    <h1>Amanhã, depois das 16h,<br>tenho um <em>plano</em> para nós.</h1>
+    <p class="hero-sub">Disse que sabia um sítio bom para ver o pôr do sol em Lisboa. A verdade é que há vários — e prefiro que escolhas tu. Desce um bocadinho.</p>
+    <div class="details">
+      <span class="pill">📅 Amanhã</span>
+      <span class="pill">🕓 A partir das 16h</span>
+      <span class="pill">☀️ Vai estar calor — leva água</span>
     </div>
   </div>
+  <div class="scroll-hint">escolhe o sítio ↓</div>
+</section>
 
-  <!-- ── QUESTIONS ── -->
-  <div class="screen" id="screen-quiz">
-    <div class="card">
-      <div class="progress-wrap">
-        <div class="progress-label" id="progress-label"></div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="progress-fill" style="width:14%"></div>
-        </div>
-      </div>
+<section class="section" id="escolha">
+  <div class="section-head">
+    <h2>Onde te apetece pensar no mundo hoje?</h2>
+    <p>Quatro miradouros, quatro vistas diferentes sobre a cidade. Escolhe o que mais te chamar — o resto trato eu.</p>
+  </div>
 
-      <h2 id="q-text"></h2>
-      <p id="q-sub" style="margin-bottom:0; font-size:0.88rem;"></p>
-
-      <div class="options" id="options-container"></div>
-
-      <div style="display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap;">
-        <button class="btn-ghost" onclick="prevQuestion()" id="btn-back"></button>
-        <button class="btn-primary" onclick="nextQuestion()" id="btn-next" disabled></button>
+  <div class="places-grid" id="places">
+    <div class="place-card" data-name="Miradouro da Senhora do Monte">
+      <img src="images/senhora-do-monte.jpg" alt="Miradouro da Senhora do Monte">
+      <div class="check-badge">✓</div>
+      <div class="place-overlay">
+        <h3>Senhora do Monte</h3>
+        <p>O ponto mais alto de Lisboa. Vista de 210º sobre a cidade toda, o castelo e o rio. Mais sossegado, ótimo para conversar sem pressa.</p>
       </div>
     </div>
-  </div>
 
-  <!-- ── RESULT ── -->
-  <div class="screen" id="screen-result">
-    <div class="card">
-      <span class="emoji-big" id="result-emoji">🎉</span>
-      <h1 id="result-title"></h1>
-      <div class="stars">★ ★ ★ ★ ★</div>
-      <p id="result-subtitle"></p>
+    <div class="place-card" data-name="Miradouro de Santa Catarina">
+      <img src="images/santa-catarina.jpg" alt="Miradouro de Santa Catarina">
+      <div class="check-badge">✓</div>
+      <div class="place-overlay">
+        <h3>Santa Catarina</h3>
+        <p>Vista aberta sobre o Tejo e a Ponte 25 de Abril, ambiente descontraído, com o Adamastor a fazer guarda.</p>
+      </div>
+    </div>
 
-      <div class="result-grid" id="result-grid"></div>
+    <div class="place-card" data-name="Miradouro de Santa Luzia">
+      <img src="images/santa-luzia.jpg" alt="Miradouro de Santa Luzia">
+      <div class="check-badge">✓</div>
+      <div class="place-overlay">
+        <h3>Santa Luzia</h3>
+        <p>Alfama aos nossos pés, azulejos antigos, glicínias na treliça. O mais romântico dos quatro, sem dúvida.</p>
+      </div>
+    </div>
 
-      <div class="final-msg" id="final-msg"></div>
-
-      <p id="copy-hint" style="color:rgba(255,255,255,0.45); font-size:0.8rem; margin-bottom:4px;"></p>
-      <button class="btn-copy" id="btn-copy" onclick="copyAnswers()">
-        <span id="copy-icon">📋</span><span id="copy-btn-text"></span>
-      </button>
-      <br/>
-      <button class="btn-ghost" id="restart-btn" onclick="restart()"></button>
+    <div class="place-card" data-name="Miradouro de São Pedro de Alcântara">
+      <img src="images/sao-pedro-de-alcantara.jpg" alt="Miradouro de São Pedro de Alcântara">
+      <div class="check-badge">✓</div>
+      <div class="place-overlay">
+        <h3>São Pedro de Alcântara</h3>
+        <p>Jardim com sombra, esplanada perto, vista direta para o castelo. Bom para chegar mais cedo e ficar até escurecer.</p>
+      </div>
     </div>
   </div>
 
-</div>
+  <div class="confirm-wrap">
+    <p class="confirm-status" id="status">Toca numa foto para escolher.</p>
+    <button class="cta" id="sendBtn" disabled>Confirmar a escolha</button>
+  </div>
+</section>
+
+<footer>
+  <div class="tile-strip"></div>
+  Feito à pressa, com muita vontade de te ver amanhã.<br>— Guilherme
+</footer>
 
 <script>
-  let lang = 'en';
+  const cards = document.querySelectorAll('.place-card');
+  const status = document.getElementById('status');
+  const sendBtn = document.getElementById('sendBtn');
+  let chosen = null;
 
-  const i18n = {
-    en: {
-      page_title:     "A Little Something for You 💌",
-      intro_h1:       "Hey, you.",
-      intro_p:        "I made this little quiz just for you.<br/>Answer honestly — your answers will help me plan the perfect time together. No pressure, just fun. 🌙",
-      intro_count:    "7 quick questions · takes about 2 minutes",
-      intro_btn:      "Let's go ✨",
-      progress_label: "Question {n} of {total}",
-      btn_back:       "← Back",
-      btn_continue:   "Continue →",
-      result_subtitle: "Here's what I know about our perfect night together:",
-      result_labels:  ["Vibe","Where","Food","After","Time","Music","What matters most"],
-      result_titles:  ["So romantic 💕","Adventure awaits 🎉","Keeping it easy 🍳","Something unforgettable ✨"],
-      result_emojis:  ["💕","🎉","🍳","🌟"],
-      final_prefix:   "The most important thing to you:",
-      final_suffix:   "I'll keep that in mind. 💫<br/><br/><em>So... are you free soon? 😊</em>",
-      copy_hint:      "Send your answers 👇",
-      copy_btn:       "Copy answers to send",
-      copied_btn:     "Copied! Send it now",
-      copy_header:    "💌 *My Date Quiz Answers*",
-      copy_labels:    ["Vibe","Where","Food","After","Time","Music","What matters most"],
-      copy_footer:    "✨ Now you know what I want — plan accordingly 😄",
-      restart_btn:    "Start over 🔄",
-      questions: [
-        {
-          id: "vibe",
-          text: "What's your ideal date vibe?",
-          sub: "Pick the one that feels most like you",
-          cols: 2,
-          options: [
-            { icon: "🕯️", label: "Romantic & cozy" },
-            { icon: "🎢", label: "Fun & adventurous" },
-            { icon: "🍳", label: "Chill & low-key" },
-            { icon: "✨", label: "Fancy & special" },
-          ]
-        },
-        {
-          id: "setting",
-          text: "Inside or outside?",
-          sub: "Where do you feel most comfortable?",
-          cols: 2,
-          options: [
-            { icon: "🌿", label: "Outside — fresh air!" },
-            { icon: "🏠", label: "Indoors — cozy vibes" },
-            { icon: "🌅", label: "Rooftop / terrace" },
-          ]
-        },
-        {
-          id: "food",
-          text: "What kind of food are you in the mood for?",
-          sub: "Be honest — this is important 😄",
-          cols: 2,
-          options: [
-            { icon: "🍕", label: "Pizza or comfort food" },
-            { icon: "🥩", label: "Steakhouse / grill" },
-            { icon: "🌮", label: "Tacos" },
-            { icon: "🍝", label: "Italian restaurant" },
-            { icon: "🥗", label: "Light & healthy" },
-          ]
-        },
-        {
-          id: "activity",
-          text: "After dinner — what sounds fun?",
-          sub: "Pick your favourite follow-up activity",
-          cols: 2,
-          options: [
-            { icon: "🎬", label: "Movie or series" },
-            { icon: "🎳", label: "Bowling / arcade" },
-            { icon: "🚶", label: "Walk under the stars" },
-            { icon: "🍸", label: "Drinks & deep talk" },
-          ]
-        },
-        {
-          id: "time",
-          text: "What time works best for you?",
-          sub: "Purely for planning — no trick questions!",
-          cols: 2,
-          options: [
-            { icon: "☀️", label: "Afternoon" },
-            { icon: "🌇", label: "Early evening" },
-            { icon: "🌙", label: "Night" },
-          ]
-        },
-        {
-          id: "music",
-          text: "What's on the playlist?",
-          sub: "Background soundtrack to the night",
-          cols: 2,
-          options: [
-            { icon: "🎷", label: "Jazz / Lo-fi" },
-            { icon: "🎸", label: "Indie / Alternative" },
-            { icon: "💿", label: "Pop / R&B" },
-            { icon: "🎵", label: "Whatever feels right" },
-          ]
-        },
-        {
-          id: "important",
-          type: "text",
-          text: "What matters most to you on a date?",
-          sub: "Tell me in your own words... 💭",
-          placeholder: "Write whatever comes to mind...",
-          cols: 1,
-        },
-      ],
-    },
-
-    eu: {
-      page_title:     "Zerbait Berezia Zuretzat 💌",
-      intro_h1:       "Aizu, zu.",
-      intro_p:        "Quiz txiki hau zuretzat sortu dut.<br/>Erantzun zintzoki — zure erantzunek gure une perfektua planifikatzen lagunduko didate. Presiorik gabe, dibertitu besterik ez. 🌙",
-      intro_count:    "7 galdera azkar · 2 minutu inguru",
-      intro_btn:      "Goazen ✨",
-      progress_label: "{n}. galdera / {total}",
-      btn_back:       "← Atzera",
-      btn_continue:   "Jarraitu →",
-      result_subtitle: "Hau da gure gau perfektuari buruz dakidana:",
-      result_labels:  ["Giroa","Non","Janaria","Ostean","Ordua","Musika","Garrantzitsuena"],
-      result_titles:  ["Hain erromantikoa 💕","Abentura zain 🎉","Lasai eta arin 🍳","Ahazteziña ✨"],
-      result_emojis:  ["💕","🎉","🍳","🌟"],
-      final_prefix:   "Zuretzat garrantzitsuena:",
-      final_suffix:   "Gogoan izango dut. 💫<br/><br/><em>Ba... libre al zaude laster? 😊</em>",
-      copy_hint:      "Bidali zure erantzunak 👇",
-      copy_btn:       "Kopiatu bidalteko",
-      copied_btn:     "Kopiatua! Bidali orain",
-      copy_header:    "💌 *Nire Date Quiz Erantzunak*",
-      copy_labels:    ["Giroa","Non","Janaria","Ostean","Ordua","Musika","Garrantzitsuena"],
-      copy_footer:    "✨ Orain badakizu zer nahi dudan — planifika ezazu 😄",
-      restart_btn:    "Berriz hasi 🔄",
-      questions: [
-        {
-          id: "vibe",
-          text: "Zein da zure date idealaren giroa?",
-          sub: "Aukeratu zureri gehien datorkiona",
-          cols: 2,
-          options: [
-            { icon: "🕯️", label: "Erromantikoa eta goxoa" },
-            { icon: "🎢", label: "Dibertigarria eta ausarta" },
-            { icon: "🍳", label: "Lasai-lasai" },
-            { icon: "✨", label: "Dotore eta berezia" },
-          ]
-        },
-        {
-          id: "setting",
-          text: "Barruan ala kanpoan?",
-          sub: "Non sentitzen zara erosoena?",
-          cols: 2,
-          options: [
-            { icon: "🌿", label: "Kanpoan — aire freskoa!" },
-            { icon: "🏠", label: "Barruan — giro goxoa" },
-            { icon: "🌅", label: "Teilatupea / terraza" },
-          ]
-        },
-        {
-          id: "food",
-          text: "Ze janari mota nahi duzu?",
-          sub: "Esan egia — garrantzitsua da 😄",
-          cols: 2,
-          options: [
-            { icon: "🍕", label: "Pizza edo janari goxoa" },
-            { icon: "🥩", label: "Haragia / parrilla" },
-            { icon: "🌮", label: "Tacos" },
-            { icon: "🍝", label: "Italiar jatetxea" },
-            { icon: "🥗", label: "Arina eta osasuntsua" },
-          ]
-        },
-        {
-          id: "activity",
-          text: "Afariaren ostean — zer egitea gustatuko litzaizuke?",
-          sub: "Aukeratu zure jarduera gogokoen",
-          cols: 2,
-          options: [
-            { icon: "🎬", label: "Filma edo serie bat" },
-            { icon: "🎳", label: "Bowling / arcade" },
-            { icon: "🚶", label: "Izarren azpian ibilaldi bat" },
-            { icon: "🍸", label: "Edaria eta elkarrizketa sakona" },
-          ]
-        },
-        {
-          id: "time",
-          text: "Ze ordutan nahi duzu?",
-          sub: "Planifikaziorako bakarrik — ez dago tranpako galderarik!",
-          cols: 2,
-          options: [
-            { icon: "☀️", label: "Arratsaldez" },
-            { icon: "🌇", label: "Iluntzean" },
-            { icon: "🌙", label: "Gauez" },
-          ]
-        },
-        {
-          id: "music",
-          text: "Zer dago zerrendan?",
-          sub: "Gauaren soinu-banda",
-          cols: 2,
-          options: [
-            { icon: "🎷", label: "Jazz / Lo-fi" },
-            { icon: "🎸", label: "Indie / Alternatiboa" },
-            { icon: "💿", label: "Pop / R&B" },
-            { icon: "🎵", label: "Momentuak esaten duena" },
-          ]
-        },
-        {
-          id: "important",
-          type: "text",
-          text: "Zer da zuretzat garrantzitsuena date batean?",
-          sub: "Esan iezadazu zure hitzetan... 💭",
-          placeholder: "Idatzi gogora datorkizuna...",
-          cols: 1,
-        },
-      ],
-    },
-  };
-
-  const answers = {};
-  let current = 0;
-
-  function t(key) { return i18n[lang][key]; }
-  function getQuestions() { return i18n[lang].questions; }
-
-  function esc(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  function setLang(newLang) {
-    lang = newLang;
-    document.title = t('page_title');
-    document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-    document.getElementById('lang-eu').classList.toggle('active', lang === 'eu');
-
-    const active = document.querySelector('.screen.active');
-    if (active.id === 'screen-quiz') {
-      renderQuestion();
-    } else if (active.id === 'screen-result') {
-      showResult();
-    } else {
-      renderIntro();
-    }
-  }
-
-  function renderIntro() {
-    document.getElementById('intro-h1').textContent    = t('intro_h1');
-    document.getElementById('intro-p').innerHTML       = t('intro_p');
-    document.getElementById('intro-count').textContent = t('intro_count');
-    document.getElementById('intro-btn').textContent   = t('intro_btn');
-  }
-
-  function spawnHearts() {
-    const bg = document.getElementById('heartsBg');
-    const emojis = ['🍚','🥚','🍳','🍚','🥚','🍳'];
-    for (let i = 0; i < 18; i++) {
-      const el = document.createElement('div');
-      el.className = 'heart-float';
-      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.animationDuration = (10 + Math.random() * 18) + 's';
-      el.style.animationDelay = (Math.random() * 15) + 's';
-      el.style.fontSize = (0.8 + Math.random() * 1) + 'rem';
-      bg.appendChild(el);
-    }
-  }
-
-  function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('screen-' + id).classList.add('active');
-  }
-
-  function startQuiz() {
-    current = 0;
-    renderQuestion();
-    showScreen('quiz');
-  }
-
-  function renderQuestion() {
-    const questions = getQuestions();
-    const q = questions[current];
-
-    document.getElementById('progress-label').textContent =
-      t('progress_label').replace('{n}', current + 1).replace('{total}', questions.length);
-    document.getElementById('q-text').textContent = q.text;
-    document.getElementById('q-sub').textContent  = q.sub;
-
-    const fill = ((current + 1) / questions.length) * 100;
-    document.getElementById('progress-fill').style.width = fill + '%';
-
-    document.getElementById('btn-back').textContent = t('btn_back');
-    document.getElementById('btn-back').style.display = current === 0 ? 'none' : 'inline-block';
-    document.getElementById('btn-next').textContent = t('btn_continue');
-
-    const container = document.getElementById('options-container');
-    container.innerHTML = '';
-
-    if (q.type === 'text') {
-      container.className = 'options single-col';
-      const ta = document.createElement('textarea');
-      ta.className = 'text-answer';
-      ta.placeholder = q.placeholder;
-      ta.rows = 5;
-      ta.value = answers[q.id] || '';
-      ta.oninput = () => {
-        answers[q.id] = ta.value;
-        document.getElementById('btn-next').disabled = !ta.value.trim();
-      };
-      container.appendChild(ta);
-      document.getElementById('btn-next').disabled = !(answers[q.id] && answers[q.id].trim());
-      return;
-    }
-
-    container.className = 'options' + (q.cols === 1 ? ' single-col' : '');
-    q.options.forEach((opt, idx) => {
-      const btn = document.createElement('button');
-      btn.className = 'option-btn' + (answers[q.id] === idx ? ' selected' : '');
-      btn.innerHTML = `<span class="opt-icon">${opt.icon}</span><span>${opt.label}</span>`;
-      btn.onclick = () => selectOption(q.id, idx);
-      container.appendChild(btn);
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      cards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      chosen = card.dataset.name;
+      status.textContent = 'Escolheste: ' + chosen + ' — boa escolha.';
+      sendBtn.disabled = false;
     });
+  });
 
-    document.getElementById('btn-next').disabled = answers[q.id] === undefined;
-  }
-
-  function selectOption(qId, idx) {
-    answers[qId] = idx;
-    document.querySelectorAll('#options-container .option-btn').forEach((btn, i) => {
-      btn.classList.toggle('selected', i === idx);
-    });
-    document.getElementById('btn-next').disabled = false;
-  }
-
-  function nextQuestion() {
-    const questions = getQuestions();
-    const q = questions[current];
-    if (q.type === 'text') {
-      if (!answers[q.id] || !answers[q.id].trim()) return;
-    } else {
-      if (answers[q.id] === undefined) return;
-    }
-    if (current < questions.length - 1) {
-      current++;
-      renderQuestion();
-    } else {
-      showResult();
-    }
-  }
-
-  function prevQuestion() {
-    if (current > 0) { current--; renderQuestion(); }
-  }
-
-  function showResult() {
-    const questions = getQuestions();
-    const T = i18n[lang];
-
-    const vibeIdx = answers["vibe"] ?? 0;
-    document.getElementById('result-emoji').textContent   = T.result_emojis[vibeIdx];
-    document.getElementById('result-title').textContent   = T.result_titles[vibeIdx];
-    document.getElementById('result-subtitle').textContent = T.result_subtitle;
-
-    const ids    = ["vibe","setting","food","activity","time","music","important"];
-    const labels = T.result_labels;
-    const grid   = document.getElementById('result-grid');
-    grid.innerHTML = '';
-
-    ids.forEach((id, i) => {
-      const q = questions.find(q => q.id === id);
-      const div = document.createElement('div');
-      div.className = 'result-item';
-
-      if (q.type === 'text') {
-        const raw = answers[id] || '';
-        const display = raw.length > 80 ? raw.slice(0, 77) + '…' : raw;
-        div.innerHTML = `<div class="r-label">${labels[i]}</div>
-                         <div class="r-value" style="font-size:0.88rem; font-style:italic;">"${esc(display)}"</div>`;
-        div.style.gridColumn = '1 / -1';
-      } else {
-        const opt = q.options[answers[id]];
-        div.innerHTML = `<div class="r-label">${labels[i]}</div>
-                         <div class="r-value">${opt.icon} ${opt.label}</div>`;
-      }
-      grid.appendChild(div);
-    });
-
-    const importantText = answers["important"] || "—";
-    document.getElementById('final-msg').innerHTML =
-      `${T.final_prefix}<br/>
-       <strong style="color:#f0d4ff; font-size:1.05rem;">"${esc(importantText)}"</strong>
-       <br/><br/>${T.final_suffix}`;
-
-    document.getElementById('copy-hint').textContent    = T.copy_hint;
-    document.getElementById('copy-btn-text').textContent = T.copy_btn;
-    document.getElementById('restart-btn').textContent   = T.restart_btn;
-
-    showScreen('result');
-  }
-
-  function copyAnswers() {
-    const questions = getQuestions();
-    const T = i18n[lang];
-    const ids    = ["vibe","setting","food","activity","time","music","important"];
-    const labels = T.copy_labels;
-
-    const lines = ids.map((id, i) => {
-      const q = questions.find(q => q.id === id);
-      if (q.type === 'text') return `💭 *${labels[i]}:* ${answers[id] || '—'}`;
-      const opt = q.options[answers[id]];
-      return `${opt.icon} *${labels[i]}:* ${opt.label}`;
-    });
-
-    const text = `${T.copy_header}\n\n${lines.join('\n')}\n\n${T.copy_footer}`;
-
-    function markCopied() {
-      const btn = document.getElementById('btn-copy');
-      btn.classList.add('copied');
-      document.getElementById('copy-icon').textContent    = '✅';
-      document.getElementById('copy-btn-text').textContent = T.copied_btn;
-      setTimeout(() => {
-        btn.classList.remove('copied');
-        document.getElementById('copy-icon').textContent    = '📋';
-        document.getElementById('copy-btn-text').textContent = T.copy_btn;
-      }, 3000);
-    }
-
-    navigator.clipboard.writeText(text).then(markCopied).catch(() => {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.cssText = 'position:fixed;opacity:0;';
-      document.body.appendChild(ta);
-      ta.focus(); ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      markCopied();
-    });
-  }
-
-  function restart() {
-    Object.keys(answers).forEach(k => delete answers[k]);
-    current = 0;
-    renderIntro();
-    showScreen('intro');
-  }
-
-  // Init
-  spawnHearts();
-  renderIntro();
+  sendBtn.addEventListener('click', () => {
+    if (!chosen) return;
+    const msg = encodeURIComponent('Escolhi o ' + chosen + ' para amanhã depois das 16h 🌇');
+    window.open('https://wa.me/?text=' + msg, '_blank');
+  });
 </script>
+
 </body>
 </html>
