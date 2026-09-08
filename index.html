@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -121,6 +121,73 @@
   @keyframes bob{
     0%,100%{transform:translate(-50%,0);}
     50%{transform:translate(-50%,6px);}
+  }
+
+  /* ---------- EASTER EGG ---------- */
+  .easter-egg{
+    max-width:640px;
+    margin:0 auto;
+    padding:40px 24px 0;
+  }
+  .ee-card{
+    text-align:center;
+    background:linear-gradient(160deg, rgba(90,44,82,0.07), rgba(232,112,58,0.05));
+    border:1px solid rgba(90,44,82,0.15);
+    border-radius:20px;
+    padding:30px 26px;
+  }
+  .ee-visual{
+    position:relative;
+    width:96px; height:96px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    overflow:hidden;
+    background:radial-gradient(circle at 35% 30%, #9b6bc4, var(--dusk-2) 55%, var(--dusk-1) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 8px 22px rgba(90,44,82,0.3);
+  }
+  .ee-heart{
+    font-size:2.2rem;
+    line-height:1;
+    animation:eeBeat 1.8s ease-in-out infinite;
+  }
+  @keyframes eeBeat{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.14);}
+  }
+  .easter-egg-img{
+    position:absolute;
+    inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 0.4s ease;
+  }
+  .easter-egg-img.loaded{opacity:1;}
+  .ee-text{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:1.1rem;
+    color:var(--dusk-1);
+    line-height:1.55;
+    max-width:440px;
+    margin:0 auto;
+  }
+  .ee-tag{
+    display:inline-block;
+    margin-top:14px;
+    font-family:'Inter', sans-serif;
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--dusk-2);
+    background:rgba(90,44,82,0.1);
+    padding:6px 14px;
+    border-radius:999px;
   }
 
   /* ---------- BODY ---------- */
@@ -271,6 +338,12 @@
     .pill{ padding:8px 16px; font-size:0.85rem; }
     .scroll-hint{ bottom:16px; font-size:0.78rem; }
 
+    .easter-egg{ padding:28px 18px 0; }
+    .ee-card{ padding:24px 18px; }
+    .ee-visual{ width:82px; height:82px; margin-bottom:14px; }
+    .ee-heart{ font-size:1.9rem; }
+    .ee-text{ font-size:1rem; }
+
     .section{ padding:56px 18px; }
     .section-head{ margin-bottom:34px; }
     .section-head h2{ font-size:1.5rem; }
@@ -302,22 +375,33 @@
   <div class="skyline"></div>
   <div class="sun"></div>
   <div class="hero-content">
-    <p class="eyebrow-line">para ti</p>
+    <p class="eyebrow-line">para você</p>
     <h1>Amanhã, depois das 16h,<br>tenho um <em>plano</em> para nós.</h1>
-    <p class="hero-sub">Disse que sabia um sítio bom para ver o pôr do sol em Lisboa. A verdade é que há vários — e prefiro que escolhas tu. Desce um bocadinho.</p>
+    <p class="hero-sub">Disse que sabia um lugar bom para ver o pôr do sol em Lisboa. A verdade é que há vários — e prefiro que você escolha. Desça um pouquinho.</p>
     <div class="details">
       <span class="pill">📅 Amanhã</span>
       <span class="pill">🕓 A partir das 16h</span>
-      <span class="pill">☀️ Vai estar calor — leva água</span>
+      <span class="pill">☀️ Vai fazer calor — leve água</span>
     </div>
   </div>
-  <div class="scroll-hint">escolhe o sítio ↓</div>
+  <div class="scroll-hint">escolha o lugar ↓</div>
+</section>
+
+<section class="easter-egg">
+  <div class="ee-card">
+    <div class="ee-visual">
+      <span class="ee-heart" aria-hidden="true">💜</span>
+      <img src="images/jungkook.jpg" alt="" class="easter-egg-img">
+    </div>
+    <p class="ee-text">Não trouxe o Jungkook, mas arranjei uma vista tão boa que ele ia morrer de inveja.</p>
+    <span class="ee-tag">borahae 💜</span>
+  </div>
 </section>
 
 <section class="section" id="escolha">
   <div class="section-head">
-    <h2>Onde te apetece pensar no mundo hoje?</h2>
-    <p>Quatro miradouros, quatro vistas diferentes sobre a cidade. Escolhe o que mais te chamar — o resto trato eu.</p>
+    <h2>Onde você tem vontade de pensar no mundo hoje?</h2>
+    <p>Quatro mirantes, quatro vistas diferentes sobre a cidade. Escolha o que mais te chamar a atenção — o resto eu cuido.</p>
   </div>
 
   <div class="places-grid" id="places">
@@ -335,7 +419,7 @@
       <div class="check-badge">✓</div>
       <div class="place-overlay">
         <h3>Santa Catarina</h3>
-        <p>Vista aberta sobre o Tejo e a Ponte 25 de Abril, ambiente descontraído, com o Adamastor a fazer guarda.</p>
+        <p>Vista aberta sobre o Tejo e a Ponte 25 de Abril, ambiente descontraído, com o Adamastor fazendo guarda.</p>
       </div>
     </div>
 
@@ -353,13 +437,13 @@
       <div class="check-badge">✓</div>
       <div class="place-overlay">
         <h3>São Pedro de Alcântara</h3>
-        <p>Jardim com sombra, esplanada perto, vista direta para o castelo. Bom para chegar mais cedo e ficar até escurecer.</p>
+        <p>Jardim com sombra, um café por perto, vista direta para o castelo. Bom para chegar mais cedo e ficar até escurecer.</p>
       </div>
     </div>
   </div>
 
   <div class="confirm-wrap">
-    <p class="confirm-status" id="status">Toca numa foto para escolher.</p>
+    <p class="confirm-status" id="status">Toque numa foto para escolher.</p>
     <button class="cta" id="sendBtn" disabled>Confirmar a escolha</button>
   </div>
 </section>
@@ -370,6 +454,15 @@
 </footer>
 
 <script>
+  const eeImg = document.querySelector('.easter-egg-img');
+  if (eeImg) {
+    if (eeImg.complete && eeImg.naturalWidth > 0) {
+      eeImg.classList.add('loaded');
+    } else {
+      eeImg.addEventListener('load', () => eeImg.classList.add('loaded'));
+    }
+  }
+
   const cards = document.querySelectorAll('.place-card');
   const status = document.getElementById('status');
   const sendBtn = document.getElementById('sendBtn');
@@ -380,7 +473,7 @@
       cards.forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       chosen = card.dataset.name;
-      status.textContent = 'Escolheste: ' + chosen + ' — boa escolha.';
+      status.textContent = 'Você escolheu: ' + chosen + ' — boa escolha.';
       sendBtn.disabled = false;
     });
   });
